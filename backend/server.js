@@ -1,3 +1,4 @@
+// server.js
 const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
@@ -9,8 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Import seeded users
 const users = require("./data/users");
 
+// 🔑 LOGIN API
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
   const user = users.find((u) => u.email === email);
@@ -28,6 +31,7 @@ app.post("/api/login", (req, res) => {
   res.json({ message: "Login successful", token });
 });
 
+// 🌍 GEOLOCATION API
 app.get("/api/geo", async (req, res) => {
   try {
     const response = await fetch(`https://ipinfo.io/json?token=${process.env.IPINFO_TOKEN}`);
@@ -38,5 +42,6 @@ app.get("/api/geo", async (req, res) => {
   }
 });
 
+// 🚀 Start server
 const PORT = 8000;
 app.listen(PORT, () => console.log(`API server running on http://localhost:${PORT}`));
